@@ -24,6 +24,18 @@ export function moodEmoji(id?: string | null): string {
   return MOOD_EMOJI[id] || "🎭";
 }
 
+/** Fixed stages shown in the pipeline stepper for a full generation. */
+export const STAGE_KEYS = ["dispatch", "architect", "screenwriter", "critic", "finalize"] as const;
+export type StageKey = (typeof STAGE_KEYS)[number];
+
+export const STAGE_TITLES: Record<StageKey, string> = {
+  dispatch: "Reading the brief",
+  architect: "Designing the film",
+  screenwriter: "Writing the scenes",
+  critic: "Script doctor review",
+  finalize: "Final cut",
+};
+
 /** Turn a raw pipeline trace step into a friendly label + detail for the UI. */
 export function describeStep(t: TraceStep): { label: string; detail: string } {
   const g = (k: string) => (t as any)[k];

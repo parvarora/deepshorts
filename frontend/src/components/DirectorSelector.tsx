@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import type { DirectorOption } from "../types";
 import { imageUrl } from "../api";
 
@@ -22,35 +23,53 @@ function initials(label: string): string {
 export default function DirectorSelector({ directors, value, onChange, disabled }: Props) {
   return (
     <div className="field">
-      <label className="field-label">Director's vision</label>
-      <div className="director-grid">
+      <label className="field-label">Director's vision (optional)</label>
+      <div className="director-carousel">
         <button
           type="button"
-          className={`director-card none ${value === null ? "selected" : ""}`}
+          className={`director-chip ${value === null ? "selected" : ""}`}
           disabled={disabled}
           onClick={() => onChange(null)}
         >
-          <div className="director-avatar fallback">★</div>
+          <span className="avatar-ring-wrap">
+            {value === null && (
+              <motion.span
+                className="director-ring"
+                layoutId="director-ring"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+            )}
+            <span className="director-avatar fallback">★</span>
+          </span>
           <span className="director-name">No director</span>
-          <span className="director-sub">Versatile</span>
         </button>
 
         {directors.map((d) => {
           const img = imageUrl(d.image);
+          const selected = value === d.id;
           return (
             <button
               key={d.id}
               type="button"
-              className={`director-card ${value === d.id ? "selected" : ""}`}
+              className={`director-chip ${selected ? "selected" : ""}`}
               disabled={disabled}
-              onClick={() => onChange(value === d.id ? null : d.id)}
+              onClick={() => onChange(selected ? null : d.id)}
               title={d.label}
             >
-              {img ? (
-                <img className="director-avatar" src={img} alt={d.label} loading="lazy" />
-              ) : (
-                <div className="director-avatar fallback">{initials(d.label)}</div>
-              )}
+              <span className="avatar-ring-wrap">
+                {selected && (
+                  <motion.span
+                    className="director-ring"
+                    layoutId="director-ring"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+                {img ? (
+                  <img className="director-avatar" src={img} alt={d.label} loading="lazy" />
+                ) : (
+                  <span className="director-avatar fallback">{initials(d.label)}</span>
+                )}
+              </span>
               <span className="director-name">{d.label}</span>
             </button>
           );

@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface Props {
   value: string;
   onChange: (v: string) => void;
@@ -24,19 +26,22 @@ export default function SituationInput({ value, onChange, disabled }: Props) {
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
-        rows={4}
+        rows={3}
       />
       <div className="example-chips">
-        {EXAMPLES.map((ex) => (
-          <button
+        {EXAMPLES.map((ex, i) => (
+          <motion.button
             key={ex}
             type="button"
             className="chip"
             disabled={disabled}
             onClick={() => onChange(ex)}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05, duration: 0.3 }}
           >
             {ex}
-          </button>
+          </motion.button>
         ))}
       </div>
     </div>

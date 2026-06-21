@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 interface Props {
   message: string;
   kind?: string;
@@ -12,7 +14,13 @@ const HINTS: Record<string, string> = {
 
 export default function ErrorBanner({ message, kind, onDismiss }: Props) {
   return (
-    <div className="error-banner" role="alert">
+    <motion.div
+      className="error-banner"
+      role="alert"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, x: [0, -8, 8, -5, 5, 0] }}
+      transition={{ duration: 0.4 }}
+    >
       <span className="error-icon">⚠️</span>
       <div className="error-body">
         <strong>Failed to generate script.</strong>
@@ -20,10 +28,10 @@ export default function ErrorBanner({ message, kind, onDismiss }: Props) {
         {kind && HINTS[kind] && <span className="error-hint">{HINTS[kind]}</span>}
       </div>
       {onDismiss && (
-        <button className="error-close" onClick={onDismiss} aria-label="Dismiss">
+        <button type="button" className="error-close" onClick={onDismiss} aria-label="Dismiss">
           ✕
         </button>
       )}
-    </div>
+    </motion.div>
   );
 }
