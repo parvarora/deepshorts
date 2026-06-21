@@ -1,0 +1,64 @@
+{
+  "source": "Udaan (2010) — full screenplay; weighted to the minimalist father-son repression, the recited poetry ('Aazadiyan'), and the final run to freedom",
+  "love_type": "cult — Cannes-selected indie that became a touchstone for a generation of viewers and filmmakers; beloved by those who felt it, not a mass blockbuster",
+  "core_emotion": "the suffocation of a controlled youth and the trembling exhilaration of finally breaking free — freedom felt in the body, not just declared",
+
+  "dialogue_style": {
+    "register": "spare, naturalistic; the father speaks in cold authority, the son largely in silence and withheld words; poetry is the only place feeling is allowed to bloom",
+    "rhythm": "long silences and clipped exchanges punctuated by recited verse — what's unsaid carries the tension",
+    "stylization": "stark realism; the only heightening is the protagonist's own writing/poetry",
+    "why_it's_theirs": "minimalism is the meaning — a household where love is forbidden expression makes every spoken word and every poem land like contraband"
+  },
+
+  "signature_dialogues": [
+    {
+      "line": "Rohan's recited poem ('...nayi roshni ki kirne...' / the 'Aazadiyan' verse of flight and freedom)",
+      "construction": "lyric poetry as the protagonist's only permitted voice — imagery of flight, light and breaking chains stands in for everything he can't say to his father",
+      "the_setup": "a boy forbidden from writing, forced into engineering, channels his whole suppressed self into verse",
+      "presentation": "the poems are delivered in voice-over/recitation against industrial monotony and over the final run — staged as private interior monologue breaking into the open, so the verse feels like the soul escaping the body",
+      "payoff": "the writing he was punished for becomes the literal voice of his liberation",
+      "why_quotable": "the flight/freedom verse is cited by viewers as an anthem of escaping controlling parents",
+      "grounding": "inferred"
+    },
+    {
+      "line": "the final confrontation where Rohan answers his father's authority and walks out with his brother",
+      "construction": "years of withheld speech released in one stand — the silence finally weaponized into words",
+      "the_setup": "a film of swallowed defiance under an abusive father reaches its breaking point",
+      "presentation": "the catharsis is staged as a RUN, not a speech — Rohan outrunning his father on foot, the camera with him; the body does what dialogue can't, and the absence of a big monologue is the masterstroke",
+      "payoff": "freedom is shown as motion (Udaan = flight), earned physically rather than argued",
+      "why_quotable": "the final run is the image people carry; 'Udaan' itself became shorthand for escape to one's dream",
+      "grounding": "grounded"
+    }
+  ],
+
+  "the_peaks": [
+    {
+      "moment": "the closing run — Rohan outrunning his father, taking his little brother toward an uncertain freedom",
+      "iconic_line": "(none — wordless)",
+      "why_loved": "pure visual catharsis after two hours of repression; freedom you feel in your chest",
+      "love_lever": "the-moment"
+    },
+    {
+      "moment": "Rohan's poetry breaking through the industrial grey",
+      "iconic_line": "(the flight/freedom verse)",
+      "why_loved": "the suppressed self finding a voice — recognition for everyone who hid their dream from a parent",
+      "love_lever": "sincerity"
+    }
+  ],
+
+  "wish_fulfillment": "standing up to a tyrannical parent and walking away free — the escape millions imagine but few execute, performed on screen",
+  "character_magnetism": "Rohan's quiet, wounded resilience that the audience aches for; the tender brotherhood with little Arjun",
+  "audacity": "telling the cathartic climax through a wordless run instead of a monologue; trusting silence and poetry over Bollywood melodrama",
+  "portability": "the final-run image and the word 'Udaan' as a symbol of taking flight toward one's dream",
+  "why_cult_not_just_good": "viewers who lived under controlling parents adopt it as their personal anthem and recommend it as a rite of passage; it inspired a wave of indie filmmakers",
+
+  "transferable_love_triggers": [
+    "Make repression the default register so a single act of defiance detonates — withhold expression everywhere, then release it once.",
+    "Give a silenced protagonist ONE permitted channel (poetry/art) and let it carry everything they can't say — contraband expression is intensely moving.",
+    "Stage catharsis as a physical action (a run) rather than a speech — freedom the audience feels in the body outlasts any monologue.",
+    "Use a title-word as the controlling metaphor (Udaan = flight) so the whole film pays off a single image.",
+    "Build the antagonist as a flawed, comprehensible human (an insecure abusive father), not a cartoon — the realism is what makes the escape feel hard-won."
+  ],
+  "grounding": "grounded-by-known-reception",
+  "confidence": "medium-high — final-run catharsis and structure confirmed; exact poem wording marked inferred (recitation didn't extract cleanly)"
+}

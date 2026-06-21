@@ -1,0 +1,88 @@
+AI Bollywood Script Generator
+
+The user gives a normal real-world situation and the system transforms it into a dramatic
+Bollywood/Hollywood movie scene with multiple scenes.
+
+Exp:
+1. Fight between two founders over putting sugar in coffee
+2. Claude Mythos (robot form) entering a AI conference to fight with Sam Alman and Elon Musk
+
+ The goal is: "Turn ordinary situations into absurd Bollywood-level drama. "
+
+> You are encouraged to make the experience fun, dramatic, and
+over-engineered.
+
+Feature List
+
+Mandatory features
+     Situation input and showing output on a scene level
+     A LLM agent or multi agents which does this.
+               Movie title
+               Tagline
+               Script with multiple scenes
+     For every scene there should be a dialogue and scene description and scene index
+     Proper Error handing
+     Responsive UI
+     Showing past generated history (Store it locally)
+
+Bonus Features (optional)
+     Show characters cards
+               Name, role, descriptions etc
+     Scene Mood Selection
+               A dropdown to select the mood for the drama.
+     Regenerate Specific Section
+               Able to regenerate scenes, title etc
+     Share a drama card,
+               A sharable public link for this generate drama
+
+Evaluation Metrics
+
+    1. Engineering (code, api, reusable component etc stuff )
+              a. You can use any coding agent. But you should be able to explain and navigate
+                   the code without the agent also.
+
+              b. It is recommended to have frontend and backend design and not everything in
+                   frontend, even if you decide to put agent in the frontend have proper code
+                   separation
+
+    2. AI Engineering
+              a. Prompt engineering
+              b. Structured output
+              c. Agent handing
+
+    3. UX/Product Thinking
+              a. Your creative angle
+
+Expected to be completed in 6-8 hours (with coding agent antigravity/ cursor/ claude/
+codex)
+
+Submission
+
+Email the github repo link and the demo video link to sumeet@deepshorts.ai
+Subject title: Assignment submission
+
+NOTE: Make sure the repo and the video link are publicly accessible.
+
+Code Submission
+
+     A single public github project link with the complete working compilable code
+     The project should be properly structured
+     Should have readme with setup, running locally steps clearly mentioned.
+
+Demo video
+
+     A working demo video < 3 min
+     If you use any AI for design or code or any assets generation, it is recommended that
+
+         you describe your approach on using the AI.
+
+AI usages
+
+     You can use grok or openrouter for the demo, they have free credits .
+               https://openrouter.ai/openai/gpt-oss-120b:free
+               https://openrouter.ai/nvidia/nemotron-3-super-120b-a12b:free
+               https://openrouter.ai/google/gemma-4-31b-it:free
+
+     DO NOT COMMIT any keys into the repository. Instead have a .env.example with
+         dummy keys for us to run this project locally.
+

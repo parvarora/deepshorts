@@ -1,0 +1,64 @@
+{
+  "source": "Kapoor & Sons (2016) — full screenplay; weighted to the 'perfect family' / family-photograph motif, the favoured-son fracture ('Mera perfect baccha'), the dinner-table blow-up and Dadu's wish",
+  "love_type": "cult — critically adored and deeply loved by audiences who saw their own families in it; a quiet, rewatched favourite rather than a slogan blockbuster",
+  "core_emotion": "the bittersweet recognition of your own imperfect family — love and resentment tangled together, and the longing to be seen and accepted as you are",
+
+  "dialogue_style": {
+    "register": "lived-in, overlapping naturalistic family Hindi-English — interruptions, old grudges, in-jokes; nobody speechifies",
+    "rhythm": "everyday domestic cross-talk that suddenly curdles into long-buried accusations",
+    "stylization": "grounded realism — deliberately un-Bollywood; emotion through accumulation, not declaration",
+    "why_it's_theirs": "the refusal of melodrama is the signature — the love lands precisely because the dialogue sounds like a real family at dinner, not a movie"
+  },
+
+  "signature_dialogues": [
+    {
+      "line": "Mera perfect baccha.",
+      "construction": "a mother's casual term of endearment that quietly encodes favouritism — two words that name the whole family's fracture",
+      "the_setup": "the 'good' son Rahul is openly preferred; the line lands the parental partiality that has warped both brothers",
+      "presentation": "dropped tenderly, almost throwaway, in an ordinary moment — the lack of drama is what makes it cut, because the audience sees the wound the speaker doesn't",
+      "payoff": "the word 'perfect' sets up the film's whole irony: there is no perfect child and no perfect family, only the myth that damages them",
+      "why_quotable": "anyone from a family with a favoured sibling feels it instantly — quietly devastating recognition",
+      "grounding": "grounded"
+    },
+    {
+      "line": "the wish for one 'perfect family photograph' (Dadu's recurring desire)",
+      "construction": "a concrete object (a single complete family photo) as the emblem of an impossible ideal",
+      "the_setup": "the grandfather just wants one photo with everyone together and happy; secrets keep sabotaging it",
+      "presentation": "the photo attempt recurs as a motif and pays off only after death and rupture — the ideal is reached imperfectly, which is the point; the staging makes a mundane family ritual unbearably poignant",
+      "payoff": "the 'perfect' photo is finally taken only once the family accepts it can't be perfect — acceptance as the real completion",
+      "why_quotable": "the 'perfect family photo' became shorthand for the gap between the families we perform and the ones we have",
+      "grounding": "grounded"
+    }
+  ],
+
+  "the_peaks": [
+    {
+      "moment": "the dinner-table explosion where every buried secret and grievance erupts at once",
+      "iconic_line": "(none — overlapping accusations)",
+      "why_loved": "the most honest family fight in modern Hindi cinema; viewers see their own dinners",
+      "love_lever": "sincerity"
+    },
+    {
+      "moment": "Dadu's death and the finally-taken imperfect family photograph",
+      "iconic_line": "(none)",
+      "why_loved": "acceptance and grief arriving together — catharsis through imperfection, not resolution",
+      "love_lever": "the-moment"
+    }
+  ],
+
+  "wish_fulfillment": "to be loved and accepted by your family exactly as you are — flaws, secrets, sexuality and all — without having to be 'perfect'",
+  "character_magnetism": "Dadu's mischievous warmth as the family's beating heart; the ache of Rahul carrying a secret and Arjun carrying resentment",
+  "audacity": "centering a gay son's quiet reality without sensationalizing it, and refusing tidy reconciliation — letting the family stay imperfect",
+  "portability": "the 'perfect family' / family-photo motif as a widely-used metaphor for performed vs real family life",
+  "why_cult_not_just_good": "audiences adopt it as the film they cite about their OWN families — personal, repeat-watched, emotionally claimed",
+
+  "transferable_love_triggers": [
+    "Hide the central wound inside a casual term of endearment ('perfect child') so the audience sees the damage the character doesn't — quiet cuts deepest.",
+    "Use one concrete object (a family photograph) as the emblem of an impossible ideal, and pay it off imperfectly — acceptance beats resolution.",
+    "Build the emotional peak from accumulated everyday grievances erupting at once, not a single villain — real-family honesty is the love-trigger.",
+    "Refuse melodrama and tidy reconciliation; let the family stay imperfect, because recognition ('that's MY family') is more lovable than a fix.",
+    "Treat 'perfect' as the enemy — name the myth early so the whole story can dismantle it and reward acceptance."
+  ],
+  "grounding": "grounded-by-known-reception",
+  "confidence": "high on theme/motif (grounded) and reception; specific photo-line wording paraphrased from the film's well-known motif"
+}

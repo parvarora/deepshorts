@@ -1,0 +1,73 @@
+{
+  "source": "Dangal (2016) — full screenplay; weighted to 'Mhari chhoriyaan chhoron se kam ke', 'gold to gold hota hai, chhora laaye ya chhori', and the final-match 'remember' beat",
+  "love_type": "both — highest-grossing Indian film worldwide, AND cult resonance as a feminist rallying text in conservative heartlands",
+  "core_emotion": "the fierce pride of being underestimated and then proving the doubters wrong — a daughter winning where the world bet she couldn't",
+
+  "dialogue_style": {
+    "register": "earthy rural Haryanvi — terse, unsentimental, masculine cadence that makes the pro-daughter message hit harder coming from a gruff patriarch",
+    "rhythm": "clipped declaratives; the father speaks in commands and verdicts, the emotion buried under hard surface",
+    "stylization": "grounded realism with one or two slogan-grade lines engineered to detach and travel",
+    "why_it's_theirs": "the Haryanvi bluntness is the point — the most progressive line in the film is spoken in the dialect of the patriarchy it overturns"
+  },
+
+  "signature_dialogues": [
+    {
+      "line": "Mhari chhoriyaan chhoron se kam ke?",
+      "construction": "rhetorical question in dialect — 'are our daughters any less than sons?'; defiance compressed to a challenge",
+      "the_setup": "a village that pities Mahavir for having only daughters; he flips the shame into a gauntlet",
+      "presentation": "thrown back at the mocking community as a challenge, not a plea — said by the father, so it reads as authority reclaiming his daughters' worth rather than a victim asking for sympathy",
+      "payoff": "reframes 'only daughters' from a curse into a boast the rest of the film proves",
+      "why_quotable": "a portable feminist rallying cry usable at any 'girls can't' moment",
+      "grounding": "grounded"
+    },
+    {
+      "line": "Gold to gold hota hai, chhora laaye ya chhori.",
+      "construction": "simple equivalence statement; brevity makes it axiomatic",
+      "the_setup": "the dream of a gold medal for the country, previously assumed to require a son",
+      "presentation": "stated as plain fact, no flourish — the lack of drama is what makes it land as undeniable truth",
+      "payoff": "collapses the son/daughter distinction into irrelevance",
+      "why_quotable": "clean, meme-ready equality slogan",
+      "grounding": "grounded"
+    },
+    {
+      "line": "Bas, ek baat yaad rakhna... (the pre-final-match lesson)",
+      "construction": "a father's last instruction reframed: this fight isn't about a medal, it's so every girl watching believes she can",
+      "the_setup": "the father is locked away and absent for the biggest match; his earlier words must carry her alone",
+      "presentation": "delivered in flashback memory while she fights without him in the arena — the absence of the mentor at the peak is the masterstroke; she has to internalize the lesson, and so does the audience",
+      "payoff": "her win lands as collective victory for every overlooked girl, not just personal glory",
+      "why_quotable": "the 'this is bigger than you' framing is universally transferable",
+      "grounding": "grounded"
+    }
+  ],
+
+  "the_peaks": [
+    {
+      "moment": "Geeta's final gold-medal bout fought without her father present",
+      "iconic_line": "(none — the national anthem plays)",
+      "why_loved": "she wins on her own, internalizing the mentor — independence achieved at the moment of triumph",
+      "love_lever": "the-moment"
+    },
+    {
+      "moment": "the daughters beating the village boys for the first time",
+      "iconic_line": "Mhari chhoriyaan chhoron se kam ke?",
+      "why_loved": "the underestimated proving the mockers wrong in front of them",
+      "love_lever": "wish-fulfillment"
+    }
+  ],
+
+  "wish_fulfillment": "the overlooked girl-child not just accepted but celebrated as national glory; the doubters publicly humbled",
+  "character_magnetism": "Mahavir: the hard, unyielding father whose tyranny is revealed as fierce love — and Geeta's transformation from reluctant to unstoppable",
+  "audacity": "spending its emotional climax on the MENTOR being absent — denying the audience the father-daughter reunion at the peak to make a point about independence",
+  "portability": "'Mhari chhoriyaan chhoron se kam ke' as a feminist slogan; the wrestling-as-empowerment image",
+  "why_cult_not_just_good": "it became a text people cite in arguments about gender and aspiration — quoted as evidence, not just enjoyed",
+
+  "transferable_love_triggers": [
+    "Put your most progressive line in the mouth (and dialect) of the very culture it challenges — the contrast multiplies its force.",
+    "Reframe a source of shame as a boast/challenge early ('are our daughters less?'), then spend the film proving the boast.",
+    "Remove the mentor at the climactic test so the protagonist must internalize the lesson alone — the absence makes independence the real victory.",
+    "State your thesis as a flat axiom ('gold is gold') with zero flourish; understatement reads as undeniable truth and travels as a slogan.",
+    "Frame the personal win as a win for everyone like the hero ('so every girl believes') to convert private triumph into collective catharsis."
+  ],
+  "grounding": "grounded-by-known-reception",
+  "confidence": "high — key lines confirmed verbatim in script; box-office and cultural status well documented"
+}

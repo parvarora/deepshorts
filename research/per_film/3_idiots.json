@@ -1,0 +1,79 @@
+{
+  "source": "3 Idiots (2009) — full screenplay; analysis weighted to the 'Aal izz well', 'Jahanpanah tussi great ho', 'Life is a race' and 'Give me some sunshine' beats",
+  "love_type": "both — mass-beloved as the highest-grossing Hindi film of its time, AND cult among students/engineers who adopted 'Aal izz well' as a real-life coping mantra",
+  "core_emotion": "the relief of being told your fear is survivable — permission to choose passion over the race everyone is bullying you into",
+
+  "dialogue_style": {
+    "register": "playful colloquial Hindi-English mix that hides a sermon inside a joke; aphoristic — lines are built to be repeated, not just heard",
+    "rhythm": "set-up gag then a turn into sincerity; call-and-response chants ('Aal izz well' yelled back across a dorm)",
+    "stylization": "heightened-but-grounded — campus naturalism spiked with cartoonish set-pieces (the 'Define machine' humiliation, the ViruS speeches)",
+    "why_it's_theirs": "Hirani's signature: a moral delivered as a punchline so the audience laughs first and only realizes later they were taught something — making the lesson feel discovered, not preached"
+  },
+
+  "signature_dialogues": [
+    {
+      "line": "Aal izz well",
+      "construction": "deliberately 'wrong' broken-English spelling/pronunciation; three tiny words; a chant, not a sentence — engineered for mass repetition",
+      "the_setup": "introduced as a night-watchman's trick — the heart is a coward, you fool it by telling it everything's fine; planted early, then paid off at the dorm and again at the childbirth climax",
+      "presentation": "first taught quietly hand-on-heart, then EXPLODED into a full call-and-response song with the whole hostel yelling it back; the script reuses it at the highest-stress moment (delivering a baby) so the mantra is battle-tested on screen before the audience adopts it",
+      "payoff": "the gag becomes a genuine survival tool — the film proves its own catchphrase works, which licenses the audience to use it",
+      "why_quotable": "it is a portable anxiety-hack any student can say before an exam; it escaped the film into real dorm-rooms",
+      "grounding": "grounded"
+    },
+    {
+      "line": "Jahanpanah, tussi great ho. Tohfa kubool karo.",
+      "construction": "mock-royal Mughal-courtier register aimed at a professor — absurd flattery as comedy of sycophancy",
+      "the_setup": "ViruS's authoritarianism has been built up; the line caps a running gag about bowing to authority",
+      "presentation": "staged as ritual mockery — bend, pat the butt, present the 'gift'; physical comedy fused to the line so the words trigger the image",
+      "payoff": "deflates the feared authority figure into a punchline; the powerful made ridiculous",
+      "why_quotable": "instantly reusable sarcasm for any boss/teacher; the Mughal cadence makes it land as a meme",
+      "grounding": "grounded"
+    },
+    {
+      "line": "Life is a race. If you don't run fast, you'll be trampled.",
+      "construction": "the antagonist's worldview compressed to a slogan — stated as common sense so the film can dismantle it",
+      "the_setup": "drilled by ViruS and Farhan's father as inarguable truth; the whole film is the rebuttal",
+      "presentation": "given to the VILLAIN as his creed, then quietly disproven by Rancho's life — the audience gets to reject a belief that was bullying them in real life",
+      "payoff": "naming the oppressive belief out loud is what lets the audience finally refuse it",
+      "why_quotable": "everyone recognizes the pressure; quoting it (to mock it) is an act of rebellion",
+      "grounding": "grounded"
+    }
+  ],
+
+  "the_peaks": [
+    {
+      "moment": "the hostel adopts 'Aal izz well' and chants it back across the night",
+      "iconic_line": "Aal izz well",
+      "why_loved": "turns private fear into collective ritual — you are not alone in being scared",
+      "love_lever": "belonging"
+    },
+    {
+      "moment": "the childbirth climax where the mantra and a vacuum-cleaner delivery actually save a life",
+      "iconic_line": "Aal izz well",
+      "why_loved": "the film cashes the emotional check it wrote — proves the philosophy under maximum stakes",
+      "love_lever": "the-moment"
+    },
+    {
+      "moment": "Rancho's takedown of rote learning ('Define machine' / pursuit of excellence not success)",
+      "iconic_line": "(none)",
+      "why_loved": "articulates a resentment millions of students felt but couldn't phrase",
+      "love_lever": "wish-fulfillment"
+    }
+  ],
+
+  "wish_fulfillment": "the student who refuses the rat race and STILL ends up the most successful (Phunsukh Wangdu) — you can disobey the system and win",
+  "character_magnetism": "Rancho: effortlessly brilliant, fearless toward authority, loyal to friends — the friend everyone wishes they had and the self everyone wishes they were",
+  "audacity": "weaponizing a childbirth-by-vacuum-cleaner as the climax of a comedy about exam stress; staking a feel-good catchphrase on life-and-death and committing fully",
+  "portability": "'Aal izz well' became a genuine real-world coping phrase; ZooBeeDooBee and 'Give me some sunshine' entered the student songbook",
+  "why_cult_not_just_good": "students adopted its mantra as identity and coping ritual — it stopped being a film you watched and became a thing you SAID before exams",
+
+  "transferable_love_triggers": [
+    "Plant a tiny, deliberately mis-spelled/odd catchphrase early, then pay it off under maximum stakes so the film proves its own mantra works — earns the audience's permission to adopt it.",
+    "Give the oppressive belief the audience lives under to the VILLAIN as a slogan, then disprove it with the hero's life; naming the bully out loud is the catharsis.",
+    "Deliver the moral as a punchline first; let the laugh land before the lesson, so the wisdom feels discovered, not preached.",
+    "Stage a catchphrase as call-and-response with a crowd so it reads as collective ritual, not a private quip — manufactures belonging.",
+    "Make the rebel who refuses the system ALSO the one who wins biggest — wish-fulfillment needs proof, not just defiance."
+  ],
+  "grounding": "grounded-by-known-reception",
+  "confidence": "high — verbatim lines confirmed in script; 'Aal izz well' real-world adoption is widely documented"
+}
