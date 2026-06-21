@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { generateStream, regenerate } from "./api";
 import type { GenerateMeta, RegenType, Script, TraceStep } from "./types";
 import { useOptions } from "./hooks/useOptions";
 import { useHistory } from "./hooks/useHistory";
+import { useHealth } from "./hooks/useHealth";
 import SituationInput from "./components/SituationInput";
 import MoodSelector from "./components/MoodSelector";
 import DirectorSelector from "./components/DirectorSelector";
@@ -17,7 +19,7 @@ import type { HistoryItem } from "./types";
 type Status = "idle" | "generating" | "done" | "error";
 
 export default function App() {
-  // --- tiny router: /drama/:id is the shared read-only view (no hooks before this) ---
+  // tiny router: /drama/:id is the shared read-only view (kept hook-free above any hooks)
   const dramaMatch = window.location.pathname.match(/^\/drama\/([^/]+)$/);
   if (dramaMatch) return <DramaView id={dramaMatch[1]} />;
   return <Home />;
@@ -26,6 +28,7 @@ export default function App() {
 function Home() {
   const { options } = useOptions();
   const history = useHistory();
+  const apiStatus = useHealth();
 
   const [situation, setSituation] = useState("");
   const [mood, setMood] = useState<string | null>(null);
@@ -60,11 +63,7 @@ function Home() {
           setScript(s);
           setMeta(m);
           setStatus("done");
-          const item = history.add(s, {
-            situation,
-            mood: effectiveMood,
-            director,
-          });
+          const item = history.add(s, { situation, mood: effectiveMood, director });
           setActiveId(item.id);
         },
         onError: (message, kind) => {
@@ -112,63 +111,98 @@ function Home() {
 
   return (
     <div className="app">
+      <div className="bg-aurora" aria-hidden="true">
+        <span className="blob blob-a" />
+        <span className="blob blob-b" />
+        <span className="blob blob-c" />
+      </div>
+
       <header className="topbar">
         <a className="brand" href="/">
-          🎬 DeepShorts <span className="brand-sub">Bollywood Script Generator</span>
+          <span className="brand-emoji">🎬</span> DeepShorts
+          <span className="brand-sub">Bollywood Script Generator</span>
         </a>
-        <span className="tagline-mini">Turn ordinary situations into absurd Bollywood-level drama</span>
+        <span className={`status-pill ${apiStatus}`}>
+          <span className="status-dot" />
+          {apiStatus === "online" ? "API Ready" : apiStatus === "offline" ? "API Offline" : "Checking…"}
+        </span>
       </header>
 
-      <div className="layout">
-        {/* LEFT */}
-        <aside className="panel left-panel">
+      <motion.section
+        className="hero"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <span className="hero-eyebrow">AI Bollywood Script Generator</span>
+        <h1 className="hero-title">Turn the ordinary into legend</h1>
+        <p className="hero-sub">
+          Describe a normal moment. Watch it become an absurd, over-engineered blockbuster.
+        </p>
+
+        <div className="command-card">
           <SituationInput value={situation} onChange={setSituation} disabled={locked} />
-          <MoodSelector moods={options.moods} value={mood} onChange={setMood} disabled={locked || madness} />
-          <RandomMadnessToggle on={madness} onToggle={setMadness} disabled={locked} />
+
+          <div className="controls-row">
+            <MoodSelector
+              moods={options.moods}
+              value={mood}
+              onChange={setMood}
+              disabled={locked || madness}
+            />
+            <RandomMadnessToggle on={madness} onToggle={setMadness} disabled={locked} />
+          </div>
+
           <DirectorSelector
             directors={options.directors}
             value={director}
             onChange={setDirector}
             disabled={locked}
           />
+
           <button
+            type="button"
             className="btn-primary generate"
             onClick={onGenerate}
             disabled={locked || situation.trim().length === 0}
           >
-            {locked ? "Rolling…" : "🎬 Generate Drama"}
+            {locked ? (
+              <>
+                <span className="btn-spinner" /> Rolling camera…
+              </>
+            ) : (
+              "🎬 Generate Drama"
+            )}
           </button>
-        </aside>
+        </div>
+      </motion.section>
 
-        {/* RIGHT */}
-        <main className="panel right-panel">
-          {error && <ErrorBanner message={error.message} kind={error.kind} onDismiss={() => setError(null)} />}
+      <main className="results">
+        {error && <ErrorBanner message={error.message} kind={error.kind} onDismiss={() => setError(null)} />}
 
-          {steps.length > 0 && <AgentThinking steps={steps} running={status === "generating"} />}
+        {steps.length > 0 && <AgentThinking steps={steps} running={status === "generating"} />}
 
-          {status === "done" && script && (
-            <>
-              <div className="output-toolbar">
-                <button className="btn-ghost" onClick={onGenerate} disabled={Boolean(busy)}>
-                  ↻ Regenerate everything
-                </button>
-              </div>
-              <MovieOutput script={script} meta={meta} onRegen={onRegen} busy={busy} />
-            </>
-          )}
+        {status === "done" && script && (
+          <MovieOutput
+            script={script}
+            meta={meta}
+            onRegen={onRegen}
+            onRegenerateAll={onGenerate}
+            busy={busy}
+          />
+        )}
 
-          {status === "idle" && steps.length === 0 && (
-            <div className="empty-state">
-              <div className="empty-reel">🎞️</div>
-              <h2>Your blockbuster awaits</h2>
-              <p>
-                Describe an ordinary moment on the left, pick a mood (and a director, if you like),
-                and watch the writers' room turn it into an over-the-top movie.
-              </p>
-            </div>
-          )}
-        </main>
-      </div>
+        {status === "idle" && steps.length === 0 && (
+          <div className="empty-state">
+            <div className="empty-reel">🎞️</div>
+            <h2>Your blockbuster awaits</h2>
+            <p>
+              Describe an ordinary moment above, pick a mood (and a director, if you like), and
+              watch the writers' room turn it into an over-the-top movie.
+            </p>
+          </div>
+        )}
+      </main>
 
       <HistoryPanel
         items={history.items}

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import type { HistoryItem } from "../types";
 import { moodEmoji } from "../labels";
 
@@ -13,9 +14,9 @@ export default function HistoryPanel({ items, activeId, onOpen, onRemove, onClea
   return (
     <section className="history">
       <div className="history-head">
-        <h2 className="section-title">Past dramas</h2>
+        <h2 className="section-title">Previously generated</h2>
         {items.length > 0 && (
-          <button className="link-btn" onClick={onClear}>
+          <button type="button" className="link-btn" onClick={onClear}>
             Clear all
           </button>
         )}
@@ -23,12 +24,16 @@ export default function HistoryPanel({ items, activeId, onOpen, onRemove, onClea
       {items.length === 0 ? (
         <p className="history-empty">Your generated movies will appear here.</p>
       ) : (
-        <div className="history-grid">
-          {items.map((it) => (
-            <div
+        <div className="history-carousel">
+          {items.map((it, i) => (
+            <motion.div
               key={it.id}
               className={`history-card ${it.id === activeId ? "active" : ""}`}
               onClick={() => onOpen(it)}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
+              whileHover={{ y: -3 }}
             >
               <div className="history-emoji">{moodEmoji(it.mood)}</div>
               <div className="history-info">
@@ -39,6 +44,7 @@ export default function HistoryPanel({ items, activeId, onOpen, onRemove, onClea
                 </div>
               </div>
               <button
+                type="button"
                 className="history-del"
                 aria-label="Delete"
                 onClick={(e) => {
@@ -48,7 +54,7 @@ export default function HistoryPanel({ items, activeId, onOpen, onRemove, onClea
               >
                 ✕
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
