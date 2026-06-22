@@ -14,6 +14,10 @@ COPY directors directors
 
 # Cloud Run injects $PORT (default 8080) and requires binding 0.0.0.0.
 ENV PORT=8080
+# Without this, Python block-buffers stdout when it's not a TTY (i.e. always, in a
+# container) — our log lines were arriving in Cloud Logging minutes late and out of
+# order. This forces every print() to flush immediately.
+ENV PYTHONUNBUFFERED=1
 EXPOSE 8080
 
 CMD exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --app-dir /srv/backend

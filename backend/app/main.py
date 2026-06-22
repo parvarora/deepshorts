@@ -143,7 +143,18 @@ def generate_stream(req: GenerateRequest):
         except Exception as exc:  # noqa: BLE001
             yield _sse({"type": "error", "kind": "agent", "error": f"{type(exc).__name__}: {exc}"})
 
-    return StreamingResponse(gen(), media_type="text/event-stream")
+    return StreamingResponse(
+        gen(),
+        media_type="text/event-stream",
+        headers={
+            # Discourage any intermediate proxy (Cloud Run's own ingress, corporate
+            # network proxies, etc.) from buffering the whole response before
+            # forwarding it — SSE needs each chunk flushed as it's produced.
+            "Cache-Control": "no-cache, no-transform",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+        },
+    )
 
 
 # --------------------------------------------------------------- regeneration
