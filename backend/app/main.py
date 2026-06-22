@@ -13,10 +13,11 @@ client to maintain its localStorage history and to power per-section regeneratio
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import uuid
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -155,6 +156,77 @@ def generate_stream(req: GenerateRequest):
             "Connection": "keep-alive",
         },
     )
+
+
+@app.websocket("/api/generate/ws")
+async def generate_ws(ws: WebSocket):
+    """Live agent visualization over a WebSocket (the streaming transport that works).
+
+    Why a WebSocket and not the SSE endpoint above: Cloud Run's ingress buffers
+    long-lived chunked HTTP responses (the SSE body is logged as 200 OK server-side
+    but never actually streams to the browser — it arrives all-at-once or 502s).
+    A WebSocket is an upgraded, full-duplex connection that the proxy treats as a raw
+    pipe, so each event reaches the client the instant it's produced. The SSE endpoint
+    is kept for local dev / non-proxied callers; the deployed frontend uses this.
+
+    Protocol: client sends one JSON GenerateRequest; server streams {type:"step"|...}
+    frames, ends with one {type:"result"} (or {type:"error"}), then closes.
+    """
+    await ws.accept()
+    try:
+        req = GenerateRequest.model_validate(await ws.receive_json())
+    except Exception as exc:  # noqa: BLE001 - malformed first frame
+        await ws.send_text(_ws_json({"type": "error", "kind": "bad_request",
+                                     "error": f"invalid request: {exc}"}))
+        await ws.close()
+        return
+
+    initial = _generate_state(req)
+    merged = dict(initial)
+    loop = asyncio.get_running_loop()
+    queue: asyncio.Queue = asyncio.Queue()
+
+    def worker():
+        # Runs in a thread: the graph + Gemini calls are blocking, so we keep them off
+        # the event loop and hand finished events back via the thread-safe queue.
+        def emit(evt: dict) -> None:
+            loop.call_soon_threadsafe(queue.put_nowait, evt)
+        try:
+            for node, partial in stream(initial):
+                merged.update(partial)
+                last = (partial.get("trace") or [{}])[-1]
+                emit({"type": "step", "node": node, "trace": last})
+            script = merged.get("script")
+            meta = _final_meta(merged)
+            if script:
+                meta["title"] = script.get("movie_title")
+            emit({"type": "result", "script": script, "meta": meta})
+        except RateLimitExceeded as exc:
+            emit({"type": "error", "kind": "rate_limit", "error": str(exc)})
+        except Exception as exc:  # noqa: BLE001
+            emit({"type": "error", "kind": "agent", "error": f"{type(exc).__name__}: {exc}"})
+        finally:
+            emit(None)  # sentinel: worker is done
+
+    task = asyncio.create_task(asyncio.to_thread(worker))
+    try:
+        while True:
+            evt = await queue.get()
+            if evt is None:
+                break
+            await ws.send_text(_ws_json(evt))
+    except WebSocketDisconnect:
+        pass  # client navigated away mid-generation; let the worker finish and discard
+    finally:
+        await task  # surface worker exceptions / ensure the thread is reaped
+        try:
+            await ws.close()
+        except RuntimeError:
+            pass  # already closed by the client
+
+
+def _ws_json(obj: dict) -> str:
+    return json.dumps(obj, default=str)
 
 
 # --------------------------------------------------------------- regeneration

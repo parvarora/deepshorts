@@ -25,7 +25,7 @@ mood/director/score badges), character cards, and scene cards.
 | Mood dropdown | `components/MoodSelector.tsx` (options from `/api/options`) |
 | Random Madness toggle | `components/RandomMadnessToggle.tsx` (sets mood `random-madness`) |
 | Director picker w/ photos | `components/DirectorSelector.tsx` (images served by backend) |
-| **Show Agent Thinking** | `components/AgentThinking.tsx` ← SSE stream `/api/generate/stream` |
+| **Show Agent Thinking** | `components/AgentThinking.tsx` ← WebSocket `/api/generate/ws` |
 | Title / Tagline / Logline | `components/MovieOutput.tsx` |
 | Character cards | `components/CharacterCard.tsx` |
 | Scenes (index, description, dialogue) | `components/SceneCard.tsx` |
@@ -36,7 +36,7 @@ mood/director/score badges), character cards, and scene cards.
 | Responsive | `styles.css` (grid collapses to single column ≤920px) |
 
 ## API layer
-`src/api.ts` is the single typed client (`generate`, `generateStream` (SSE), `regenerate`,
+`src/api.ts` is the single typed client (`generate`, `generateStream` (WebSocket), `regenerate`,
 `getOptions`, `health`). Types in `src/types.ts` mirror the backend Pydantic schemas exactly.
 
 ## Sharing (optional)

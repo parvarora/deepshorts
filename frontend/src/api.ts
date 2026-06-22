@@ -8,9 +8,9 @@ import type {
   TraceStep,
 } from "./types";
 
-// Nullish coalescing (not ||): production sets VITE_API_BASE="" on purpose, meaning
-// "call same-origin, relative paths" (Firebase Hosting rewrites /api/** to Cloud Run).
-// `||` would treat that empty string as unset and silently fall back to localhost.
+// In production VITE_API_BASE is the Cloud Run service URL (the browser calls it
+// directly — see docs/DEPLOY.md). Nullish coalescing (not ||) so a deliberately-empty
+// value would still be honored rather than falling back to localhost.
 export const API_BASE: string =
   (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://localhost:8000";
 
@@ -79,53 +79,64 @@ export interface StreamHandlers {
   onError: (message: string, kind: string) => void;
 }
 
-// Streams live per-agent events from /api/generate/stream (SSE over POST via fetch).
-export async function generateStream(
+// Streams live per-agent events over a WebSocket (/api/generate/ws).
+//
+// Why a WebSocket, not SSE/fetch-streaming: Cloud Run's ingress buffers long-lived
+// chunked HTTP responses, so SSE logged 200 OK server-side but never streamed to the
+// browser (it 502'd after a minute). A WebSocket is an upgraded full-duplex connection
+// the proxy treats as a raw pipe, so each step reaches the UI the instant it's produced.
+export function generateStream(
   req: GenerateRequest,
   handlers: StreamHandlers,
 ): Promise<void> {
-  let res: Response;
-  try {
-    res = await fetch(`${API_BASE}/api/generate/stream`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(req),
-    });
-  } catch (e) {
-    handlers.onError("Could not reach the server. Is the backend running?", "network");
-    return;
-  }
-  if (!res.ok || !res.body) {
-    handlers.onError(`Stream failed (${res.status})`, "server");
-    return;
-  }
+  // http(s):// -> ws(s):// — same host, same scheme family.
+  const wsUrl = `${API_BASE.replace(/^http/i, "ws")}/api/generate/ws`;
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
+  return new Promise<void>((resolve) => {
+    let settled = false; // a result or error was already delivered to the caller
+    const fail = (message: string, kind: string) => {
+      if (settled) return;
+      settled = true;
+      handlers.onError(message, kind);
+    };
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
+    let ws: WebSocket;
+    try {
+      ws = new WebSocket(wsUrl);
+    } catch {
+      fail("Could not reach the server. Is the backend running?", "network");
+      resolve();
+      return;
+    }
 
-    let sep: number;
-    while ((sep = buffer.indexOf("\n\n")) >= 0) {
-      const chunk = buffer.slice(0, sep);
-      buffer = buffer.slice(sep + 2);
-      const dataLine = chunk
-        .split("\n")
-        .find((l) => l.startsWith("data:"));
-      if (!dataLine) continue;
+    ws.onopen = () => ws.send(JSON.stringify(req));
+
+    ws.onmessage = (e) => {
       let evt: any;
       try {
-        evt = JSON.parse(dataLine.slice(5).trim());
+        evt = JSON.parse(e.data);
       } catch {
-        continue;
+        return;
       }
-      if (evt.type === "step") handlers.onStep(evt.node, evt.trace);
-      else if (evt.type === "result") handlers.onResult(evt.script, evt.meta);
-      else if (evt.type === "error") handlers.onError(evt.error, evt.kind || "agent");
-    }
-  }
+      if (evt.type === "step") {
+        handlers.onStep(evt.node, evt.trace);
+      } else if (evt.type === "result") {
+        settled = true;
+        handlers.onResult(evt.script, evt.meta);
+      } else if (evt.type === "error") {
+        settled = true;
+        handlers.onError(evt.error, evt.kind || "agent");
+      }
+    };
+
+    // Fires on connection failure / abnormal close. If we already delivered a
+    // result/error this is just the normal teardown and is ignored.
+    ws.onerror = () => fail("Connection lost while generating.", "network");
+
+    ws.onclose = () => {
+      // Socket closed before any result/error arrived → treat as a failure.
+      fail("Connection closed before the script was ready.", "network");
+      resolve();
+    };
+  });
 }

@@ -10,19 +10,30 @@ Browser ──▶ Firebase Hosting (deepshorts-6c29a.web.app)   — serves the s
    └──▶ Cloud Run service "deepshorts-api" (asia-south1)  — called directly for all /api/** calls
 ```
 
-## Why direct, not a Hosting rewrite (a correction worth knowing)
-The original version of this guide routed `/api/**` through a Firebase Hosting rewrite to
-Cloud Run, so the browser would only ever see one origin and CORS wouldn't matter. **That
-doesn't hold up in practice for this app:** Hosting's rewrite proxy is built for quick
-request→response APIs, and this backend's generation takes 30-60+ seconds and streams live
-progress the whole time (`/api/generate/stream`). The rewrite proxy buffers/times out before
-that finishes, surfacing as a `502` with the live progress view never showing anything at all.
-Calling Cloud Run directly avoids the proxy layer entirely — Cloud Run itself handles
-long-lived streaming responses fine. The cost is that requests are now genuinely
-cross-origin, so CORS has to allow it (handled already — see below).
+## Live progress uses a WebSocket, not SSE (a correction worth knowing)
+Generation takes 30-60+ seconds and shows live agent progress the whole time. Two earlier
+attempts at this failed in production and are worth recording so nobody re-treads them:
+
+1. **Firebase Hosting rewrite → Cloud Run (SSE).** Routing `/api/**` through a Hosting
+   rewrite kept everything same-origin, but Hosting's rewrite proxy buffers/times out on a
+   long streaming response — `502`, live view never appeared. So we switched to calling
+   Cloud Run **directly** (which is why the requests are cross-origin and CORS must allow
+   it — see below).
+2. **Direct Cloud Run, but still SSE (chunked HTTP).** Even bypassing Hosting, this *also*
+   failed: Cloud Run's own ingress buffers long-lived chunked HTTP responses. The backend
+   logged `POST /api/generate/stream 200 OK` immediately, but no bytes ever reached the
+   browser until it gave up with a `502`. Anti-buffering response headers
+   (`X-Accel-Buffering: no`, etc.) did **not** fix it.
+
+The fix that works is a **WebSocket** (`/api/generate/ws`): an upgraded, full-duplex
+connection that the proxy treats as a raw pipe rather than a bufferable response, so each
+agent step reaches the UI the instant it's produced. Cloud Run supports WebSockets natively.
+The `/api/generate/stream` SSE endpoint still exists for local dev / non-proxied callers, but
+the deployed frontend uses the WebSocket. No extra deploy flags are needed — WebSocket
+upgrades work on the same Cloud Run service URL.
 
 ## Why Cloud Run (not Cloud Functions directly)
-Cloud Run supports long-lived streaming HTTP responses natively; it's also just a normal
+Cloud Run supports WebSockets and long-lived connections natively; it's also just a normal
 container, so the existing `uvicorn` app runs unmodified.
 
 ## Prerequisites
