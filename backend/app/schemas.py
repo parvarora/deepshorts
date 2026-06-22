@@ -36,7 +36,10 @@ class Blueprint(BaseModel):
     movie_title: str
     tagline: str
     logline: str
-    mood: str
+    mood: str = Field(
+        description="A SHORT mood/register label only — 2-4 words, e.g. 'Maximum Drama', "
+        "'Noir Thriller', 'Comedy Chaos'. Never a sentence and never the mood instructions."
+    )
     characters: list[Character]
     scene_plan: list[SceneBeat] = Field(min_length=1)
 

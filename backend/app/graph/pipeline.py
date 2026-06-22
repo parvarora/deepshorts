@@ -32,14 +32,25 @@ def _trace(state: ScriptState, step: str, status: str, **detail) -> list:
     return list(state.get("trace", [])) + [rec]
 
 
+def _clean_mood(value: str | None, fallback: str) -> str:
+    """A mood label is short (e.g. 'Maximum Drama'). The model occasionally echoes the
+    whole mood-direction block into this field; reject anything long/multi-line so it
+    can't blow up the poster, and fall back to the user-picked label."""
+    v = (value or "").strip()
+    if not v or len(v) > 40 or "\n" in v:
+        return fallback
+    return v
+
+
 def _assemble_full(state: ScriptState) -> Script:
     bp = Blueprint.model_validate(state["blueprint"])
     scenes = [Scene.model_validate(s) for s in state.get("scenes", [])]
     scenes.sort(key=lambda s: s.scene_index)
+    mood_fallback = pretty(state.get("mood")) if state.get("mood") else "Maximum Drama"
     return Script(
         movie_title=bp.movie_title,
         tagline=bp.tagline,
-        mood=bp.mood or (state.get("mood") or "Maximum Drama"),
+        mood=_clean_mood(bp.mood, mood_fallback),
         logline=bp.logline,
         directed_in_the_style_of=pretty(state.get("director")),
         characters=bp.characters,
