@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeepShorts — AI Architecture</title>
+<style>
+  :root{
+    --bg:#0b0a12; --panel:#151325; --panel2:#1d1a30; --line:#2c2742;
+    --ink:#ece9f5; --muted:#a59fc4; --gold:#ffd88a; --rose:#ff7a9c;
+    --cyan:#67e8f9; --green:#86efac; --violet:#b794ff; --amber:#fbbf24;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:radial-gradient(1200px 700px at 15% -10%,#1c1838 0%,transparent 60%),
+               radial-gradient(1000px 600px at 100% 0%,#241a33 0%,transparent 55%),var(--bg);
+    color:var(--ink); font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased; padding:40px 28px 56px;
+  }
+  .wrap{max-width:1140px; margin:0 auto}
+  .eyebrow{letter-spacing:.28em; text-transform:uppercase; font-size:11px; color:var(--gold); font-weight:700}
+  h1{font-size:34px; margin:6px 0 4px; letter-spacing:-.02em}
+  .sub{color:var(--muted); margin:0 0 26px; max-width:780px}
+
+  .flow{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:26px}
+  .node{padding:8px 13px; border-radius:10px; font-weight:600; font-size:13px; border:1px solid var(--line); background:var(--panel2)}
+  .node small{display:block; color:var(--muted); font-weight:400; font-size:10.5px}
+  .arrow{color:var(--muted); font-weight:700}
+
+  .grid{display:grid; grid-template-columns:1.25fr .75fr; gap:18px; align-items:start}
+  .card{background:linear-gradient(180deg,var(--panel),#100e1d); border:1px solid var(--line); border-radius:16px; padding:18px}
+  .card h2{margin:0 0 3px; font-size:15px}
+  .card .hint{color:var(--muted); font-size:12.5px; margin:0 0 16px}
+  .tag{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+       border:1px solid var(--line); border-radius:999px; padding:3px 9px; margin-bottom:11px}
+
+  /* graph */
+  .graph{display:flex; flex-direction:column; gap:9px}
+  .row{display:flex; align-items:center; gap:9px; flex-wrap:wrap}
+  .gn{flex:1; min-width:0; display:flex; gap:10px; align-items:center;
+      background:var(--panel2); border:1px solid var(--line); border-radius:11px; padding:10px 12px}
+  .gn .ic{font-size:18px; width:22px; text-align:center}
+  .gn b{font-size:13px} .gn small{display:block; color:var(--muted); font-size:11.5px}
+  .gn.router{border-color:rgba(251,191,36,.4); background:rgba(251,191,36,.06)}
+  .gn.agent{border-color:rgba(183,148,255,.34)}
+  .gn.system{border-color:rgba(134,239,172,.32); background:rgba(134,239,172,.05)}
+  .vline{margin-left:11px; width:2px; height:10px; background:var(--line)}
+  .loop{display:flex; align-items:center; gap:8px; color:var(--violet); font-size:12px; font-weight:600;
+        border:1px dashed rgba(183,148,255,.5); border-radius:10px; padding:7px 11px; background:rgba(183,148,255,.06)}
+  .branch{margin-top:6px; padding:11px 12px; border:1px dashed var(--line); border-radius:11px; background:rgba(255,255,255,.02)}
+  .branch .bl{font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--amber); font-weight:700; margin-bottom:7px}
+  .regs{display:flex; flex-wrap:wrap; gap:6px}
+  .reg{font-size:11.5px; padding:4px 9px; border-radius:8px; background:var(--panel2); border:1px solid var(--line)}
+
+  /* choke point */
+  .choke{background:linear-gradient(180deg,rgba(103,232,249,.07),#100e1d); border:1px solid rgba(103,232,249,.3)}
+  .step{display:flex; gap:11px; padding:9px 0; border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .step .num{flex:none; width:22px; height:22px; border-radius:50%; background:rgba(103,232,249,.14); color:var(--cyan);
+             font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center}
+  .step b{font-size:13px} .step span{color:var(--muted); font-size:12px; display:block}
+
+  .strip{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px}
+  .cell{background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:13px}
+  .cell .ic{font-size:18px} .cell b{display:block; font-size:13px; margin:6px 0 3px} .cell span{color:var(--muted); font-size:11.5px}
+
+  .facts{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:14px}
+  .fact{background:linear-gradient(180deg,var(--panel),#100e1d); border:1px solid var(--line); border-radius:13px; padding:13px; text-align:center}
+  .fact .n{font-size:21px; font-weight:800; color:var(--gold); line-height:1}
+  .fact .l{color:var(--muted); font-size:11px; margin-top:5px}
+  footer{color:var(--muted); font-size:11.5px; margin-top:26px; text-align:center}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}.strip,.facts{grid-template-columns:repeat(2,1fr)}}
+  @media print{body{padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">DeepShorts · Multi-Agent Pipeline</div>
+  <h1>🧠 AI Architecture</h1>
+  <p class="sub">A LangGraph state machine drives three narrow agents through an always-on critic loop.
+  Every model call funnels through one hardened Gemini client — rate-limited, retried, validated — and
+  each completed node streams to the browser live over a WebSocket.</p>
+
+  <div class="flow">
+    <span class="node">🌐 Browser<small>React + Vite</small></span><span class="arrow">→</span>
+    <span class="node">🔌 WebSocket<small>/api/generate/ws</small></span><span class="arrow">→</span>
+    <span class="node">⚡ FastAPI<small>Cloud Run</small></span><span class="arrow">→</span>
+    <span class="node">🕸️ LangGraph<small>stateful graph</small></span><span class="arrow">→</span>
+    <span class="node">✨ Gemini<small>2.5-flash</small></span>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: the graph -->
+    <div class="card">
+      <span class="tag">graph/pipeline.py — compiled StateGraph</span>
+      <h2>The orchestration graph</h2>
+      <p class="hint">One shared <b>ScriptState</b> flows through every node; each node appends a trace entry that powers the live view.</p>
+      <div class="graph">
+        <div class="gn router"><span class="ic">📜</span><div><b>dispatch</b><small>router — composes the voice, picks the route by mode</small></div></div>
+        <div class="vline"></div>
+        <div class="gn agent"><span class="ic">📐</span><div><b>architect</b><small>blueprint: title · tagline · logline · characters · scene plan</small></div></div>
+        <div class="vline"></div>
+        <div class="gn agent"><span class="ic">✍️</span><div><b>screenwriter</b><small>writes scenes + Hinglish dialogue from the blueprint</small></div></div>
+        <div class="vline"></div>
+        <div class="gn agent"><span class="ic">🩺</span><div><b>critic — script doctor</b><small>scores, lists issues, decides pass / revise</small></div></div>
+        <div class="row" style="margin:3px 0">
+          <div class="loop">↺ not passed &amp; within budget → back to screenwriter</div>
+          <span class="arrow">else ↓</span>
+        </div>
+        <div class="gn system"><span class="ic">🎬</span><div><b>finalize</b><small>assemble the validated Script → END</small></div></div>
+
+        <div class="branch">
+          <div class="bl">◆ alternate route — regeneration (one focused call, canon locked)</div>
+          <div class="regs">
+            <span class="reg">📝 regen · title/tagline</span>
+            <span class="reg">🎞️ regen · scene</span>
+            <span class="reg">💬 regen · dialogue</span>
+            <span class="reg">👥 regen · characters</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: the choke point -->
+    <div class="card choke">
+      <span class="tag">llm/client.py — single choke point</span>
+      <h2>Every agent call, hardened</h2>
+      <p class="hint">Agents stay simple; all resilience lives here.</p>
+      <div class="step"><span class="num">1</span><div><b>Rate-limit gate</b><span>Token bucket (RPM) + daily cap (RPD) before each call.</span></div></div>
+      <div class="step"><span class="num">2</span><div><b>Thinking on</b><span>Reasoning captured as thought summaries for observability.</span></div></div>
+      <div class="step"><span class="num">3</span><div><b>Retry w/ backoff</b><span>Up to 5× on 429 / 5xx, exponential + jitter.</span></div></div>
+      <div class="step"><span class="num">4</span><div><b>Tolerant parse</b><span>Strip &lt;think&gt; tags &amp; fences, extract balanced JSON.</span></div></div>
+      <div class="step"><span class="num">5</span><div><b>Validate + 1 repair</b><span>Pydantic schema; one structured re-ask, then fail gracefully.</span></div></div>
+    </div>
+  </div>
+
+  <!-- cross-cutting -->
+  <div class="strip">
+    <div class="cell"><div class="ic">🔗</div><b>Structured handoffs</b><span>Pydantic models are the contract between every agent.</span></div>
+    <div class="cell"><div class="ic">🧮</div><b>Shared state</b><span>ScriptState carries blueprint, scenes, critique, trace.</span></div>
+    <div class="cell"><div class="ic">📡</div><b>Live streaming</b><span>Each finished node emits a step event over the WebSocket.</span></div>
+    <div class="cell"><div class="ic">🛟</div><b>Graceful degradation</b><span>Typed errors (rate-limit / agent) surface cleanly to the UI.</span></div>
+  </div>
+
+  <!-- facts -->
+  <div class="facts">
+    <div class="fact"><div class="n">3</div><div class="l">narrow agents<br>+ 4 regen nodes</div></div>
+    <div class="fact"><div class="n">≤ 2</div><div class="l">critic→revise loops<br>(loop guard)</div></div>
+    <div class="fact"><div class="n">12 / 1400</div><div class="l">RPM / RPD<br>self-throttle</div></div>
+    <div class="fact"><div class="n">1</div><div class="l">Cloud Run instance<br>(accurate limiter)</div></div>
+  </div>
+
+  <footer>DeepShorts · LangGraph orchestration · single hardened Gemini client · WebSocket live visualization</footer>
+</div>
+</body>
+</html>

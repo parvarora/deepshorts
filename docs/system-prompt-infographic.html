@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DeepShorts — System Prompt Architecture</title>
+<style>
+  :root{
+    --bg:#0b0a12; --panel:#151325; --panel2:#1d1a30; --line:#2c2742;
+    --ink:#ece9f5; --muted:#a59fc4; --gold:#ffd88a; --rose:#ff7a9c;
+    --cyan:#67e8f9; --green:#86efac; --violet:#b794ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:radial-gradient(1200px 700px at 20% -10%,#1c1838 0%,transparent 60%),
+               radial-gradient(1000px 600px at 100% 0%,#241a33 0%,transparent 55%),var(--bg);
+    color:var(--ink); font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased; padding:40px 28px 56px;
+  }
+  .wrap{max-width:1120px; margin:0 auto}
+  .eyebrow{letter-spacing:.28em; text-transform:uppercase; font-size:11px; color:var(--gold); font-weight:700}
+  h1{font-size:34px; margin:6px 0 4px; letter-spacing:-.02em}
+  h1 .em{font-size:30px}
+  .sub{color:var(--muted); margin:0 0 26px; max-width:760px}
+  .formula{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:linear-gradient(180deg,var(--panel),#120f20); border:1px solid var(--line);
+    border-radius:14px; padding:16px 18px; margin-bottom:30px; font-size:14px;
+  }
+  .chip{padding:6px 11px; border-radius:9px; font-weight:600; white-space:nowrap}
+  .chip.base{background:rgba(183,148,255,.16); color:var(--violet); border:1px solid rgba(183,148,255,.35)}
+  .chip.mood{background:rgba(255,122,156,.15); color:var(--rose); border:1px solid rgba(255,122,156,.35)}
+  .chip.dir{background:rgba(103,232,249,.13); color:var(--cyan); border:1px solid rgba(103,232,249,.32)}
+  .chip.out{background:rgba(134,239,172,.13); color:var(--green); border:1px solid rgba(134,239,172,.32)}
+  .op{color:var(--muted); font-weight:700}
+  .grid{display:grid; grid-template-columns:1.15fr .85fr; gap:18px; align-items:start}
+  .card{background:linear-gradient(180deg,var(--panel),#100e1d); border:1px solid var(--line);
+        border-radius:16px; padding:18px 18px 16px}
+  .card h2{margin:0 0 4px; font-size:15px; letter-spacing:.02em}
+  .card .hint{color:var(--muted); font-size:12.5px; margin:0 0 14px}
+  .tag{display:inline-block; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+       color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:3px 9px; margin-bottom:10px}
+
+  /* base prompt stack */
+  .stack{display:flex; flex-direction:column; gap:7px}
+  .sec{background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:9px 12px; font-size:13px}
+  .sec b{font-weight:600}
+  .sec.slot{border-style:dashed; position:relative}
+  .sec.slot.mood{border-color:rgba(255,122,156,.55); background:rgba(255,122,156,.06)}
+  .sec.slot.dir{border-color:rgba(103,232,249,.5); background:rgba(103,232,249,.06)}
+  .sec .slotlabel{float:right; font-size:10px; letter-spacing:.12em; text-transform:uppercase; font-weight:700}
+  .sec.slot.mood .slotlabel{color:var(--rose)}
+  .sec.slot.dir .slotlabel{color:var(--cyan)}
+  .sec small{display:block; color:var(--muted); font-size:11.5px; margin-top:2px}
+  .cutline{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:11px; margin-top:4px}
+  .cutline::before,.cutline::after{content:""; height:1px; flex:1; background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px)}
+
+  /* libraries */
+  .lib{display:flex; flex-direction:column; gap:14px}
+  .libcard{border-radius:14px; padding:14px 15px; border:1px solid var(--line)}
+  .libcard.mood{background:rgba(255,122,156,.06); border-color:rgba(255,122,156,.3)}
+  .libcard.dir{background:rgba(103,232,249,.05); border-color:rgba(103,232,249,.28)}
+  .libcard .n{font-size:26px; font-weight:800; line-height:1}
+  .libcard.mood .n{color:var(--rose)} .libcard.dir .n{color:var(--cyan)}
+  .libcard .lab{font-size:12px; color:var(--muted)}
+  .pills{display:flex; flex-wrap:wrap; gap:5px; margin-top:10px}
+  .pill{font-size:11px; padding:3px 8px; border-radius:7px; background:rgba(255,255,255,.04); border:1px solid var(--line); color:var(--ink)}
+  .pill.more{color:var(--muted)}
+  .arrowdown{text-align:center; color:var(--muted); font-size:18px; margin:2px 0}
+
+  /* pipeline */
+  .pipe{margin-top:18px}
+  .voice{background:linear-gradient(90deg,rgba(183,148,255,.12),rgba(103,232,249,.10),rgba(255,122,156,.12));
+         border:1px solid var(--line); border-radius:14px; padding:14px 16px; text-align:center}
+  .voice b{color:var(--gold)}
+  .voice small{color:var(--muted)}
+  .agents{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px}
+  .agent{background:linear-gradient(180deg,var(--panel),#100e1d); border:1px solid var(--line);
+         border-radius:14px; padding:14px}
+  .agent .ic{font-size:20px}
+  .agent h3{margin:6px 0 3px; font-size:14px}
+  .agent p{margin:0; color:var(--muted); font-size:12px}
+  .loopnote{text-align:center; color:var(--muted); font-size:12px; margin-top:12px}
+  .loopnote b{color:var(--violet)}
+
+  .rules{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:18px}
+  .rule{display:flex; gap:10px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 13px}
+  .rule .k{font-size:18px}
+  .rule b{display:block; font-size:13px; margin-bottom:2px}
+  .rule span{color:var(--muted); font-size:12px}
+  footer{color:var(--muted); font-size:11.5px; margin-top:26px; text-align:center}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}.agents,.rules{grid-template-columns:1fr}}
+  @media print{body{padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">DeepShorts · AI Bollywood Script Generator</div>
+  <h1><span class="em">🎬</span> The System Prompt, Composed</h1>
+  <p class="sub">One base “world-bible” prompt with two swappable slots. The mood and director the user
+  picks are injected into those slots, the I/O contract is trimmed off, and the result becomes the
+  shared voice every agent writes from.</p>
+
+  <div class="formula">
+    <span class="chip base">Base prompt</span><span class="op">+</span>
+    <span class="chip mood">Mood block</span><span class="op">+</span>
+    <span class="chip dir">Director block</span>
+    <span class="op">— trim I/O →</span>
+    <span class="chip out">Shared voice context</span>
+    <span class="op">→ 3 agents</span>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: base prompt anatomy -->
+    <div class="card">
+      <span class="tag">prompts/script_generator.system.md</span>
+      <h2>Base prompt — the composable skeleton</h2>
+      <p class="hint">Authored once. The two dashed bands are injection slots; everything else is fixed craft.</p>
+      <div class="stack">
+        <div class="sec"><b>You are a writer-director</b><small>Turn an ordinary moment into cinema, rooted in something true.</small></div>
+        <div class="sec slot dir"><span class="slotlabel">◆ slot: director_profile</span><b>The mind making this film</b><small>Default: a versatile master. Replaced by the chosen director’s profile — the <i>voice</i>.</small></div>
+        <div class="sec"><b>Understand before you write</b><small>Find the human friction; build wants, fears, contradictions.</small></div>
+        <div class="sec slot mood"><span class="slotlabel">◆ slot: mood_direction</span><b>The mood of this film</b><small>Default: Maximum Drama. Replaced by the chosen mood — the <i>register</i> (authoritative).</small></div>
+        <div class="sec"><b>Director’s mind × film’s mood</b><small>Director = the <i>how</i>; mood = the <i>what kind of film</i>.</small></div>
+        <div class="sec"><b>Give the small thing the weight of cinema</b><small>Scale comes from belief, not noise.</small></div>
+        <div class="sec"><b>How the writing should land</b><small>Be specific · reveal through action · every scene turns.</small></div>
+        <div class="sec"><b>Language</b><small>Descriptions in English · dialogue in Hindi-led Hinglish (Roman script).</small></div>
+        <div class="sec"><b>The shape of the film &amp; think in layers</b><small>Rising multi-scene arc; reason internally, output only the result.</small></div>
+        <div class="cutline">compose_voice() cuts here ✂ — “# What you receive” onward is dropped</div>
+        <div class="sec" style="opacity:.5"><b>I/O contract + JSON schema</b><small>Not shared — each agent appends its own role + schema.</small></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: libraries feeding the slots -->
+    <div class="card">
+      <span class="tag">prompts/moods/ · prompts/directors/</span>
+      <h2>Two libraries fill the slots</h2>
+      <p class="hint">One short, affirmative block per file, swapped in by a line-anchored marker match.</p>
+      <div class="lib">
+        <div class="libcard mood">
+          <div class="n">16</div><div class="lab">mood blocks → <b style="color:var(--rose)">MOOD_DIRECTION</b></div>
+          <div class="pills">
+            <span class="pill">Maximum Drama ★</span><span class="pill">Comedy Chaos</span>
+            <span class="pill">Noir Thriller</span><span class="pill">Epic Tragedy</span>
+            <span class="pill">Aching Romance</span><span class="pill more">+ 11 more</span>
+          </div>
+        </div>
+        <div class="arrowdown">↑ injected into ↑</div>
+        <div class="libcard dir">
+          <div class="n">10</div><div class="lab">director minds → <b style="color:var(--cyan)">DIRECTOR_PROFILE</b></div>
+          <div class="pills">
+            <span class="pill">Rohit Shetty</span><span class="pill">S. L. Bhansali</span>
+            <span class="pill">Anurag Kashyap</span><span class="pill">Rajkumar Hirani</span>
+            <span class="pill">Raj &amp; DK</span><span class="pill more">+ 5 more</span>
+          </div>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:14px">If a slot is left unpicked, its <b>default text ships in the base</b> — so the prompt is always complete.</p>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div class="pipe">
+    <div class="voice"><b>Shared voice context</b> — the trimmed world-bible, injected <b>once</b>.
+      <small>Mood is authoritative over register · director leads the voice.</small></div>
+    <div class="arrowdown">↓ each agent appends its own narrow role + output schema ↓</div>
+    <div class="agents">
+      <div class="agent"><div class="ic">📐</div><h3>Architect</h3><p>Builds the blueprint: title, tagline, logline, characters, scene plan.</p></div>
+      <div class="agent"><div class="ic">✍️</div><h3>Screenwriter</h3><p>Writes the scenes & Hinglish dialogue from the blueprint.</p></div>
+      <div class="agent"><div class="ic">🩺</div><h3>Script Doctor</h3><p>Scores it, flags issues, sends it back to revise — or passes it.</p></div>
+    </div>
+    <div class="loopnote">↺ <b>Critic → Screenwriter revise loop</b>, hard-bounded by <b>max_iterations = 2</b> (loop guard), then finalize.</div>
+  </div>
+
+  <!-- DESIGN RULES -->
+  <div class="rules">
+    <div class="rule"><span class="k">🎚️</span><div><b>Mood is authoritative</b><span>It governs pace, language and imagery; the director keeps their voice inside it.</span></div></div>
+    <div class="rule"><span class="k">🗣️</span><div><b>Hinglish dialogue, English staging</b><span>Hindi-led Roman-script speech; scene descriptions stay in clear English.</span></div></div>
+    <div class="rule"><span class="k">📈</span><div><b>Small problem → massive drama</b><span>The more ordinary the trigger, the more legendary the conflict — played dead straight.</span></div></div>
+    <div class="rule"><span class="k">🧩</span><div><b>One voice, narrow agents</b><span>Shared context injected once; each agent adds only its own job + JSON schema.</span></div></div>
+  </div>
+
+  <footer>DeepShorts · composable system prompt (base + mood + director) → Architect → Screenwriter → Script Doctor</footer>
+</div>
+</body>
+</html>
