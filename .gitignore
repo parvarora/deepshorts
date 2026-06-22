@@ -25,3 +25,6 @@ build/
 Thumbs.db
 .idea/
 .vscode/
+
+# stray Firebase config scratch file (real config lives in frontend/.env)
+firebaseconfig.txt

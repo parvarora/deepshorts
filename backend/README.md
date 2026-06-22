@@ -1,6 +1,6 @@
 # Backend — AI Bollywood Script Generator
 
-A resilient multi-agent pipeline (LangGraph + Gemini 3.5 Flash) that turns an ordinary
+A resilient multi-agent pipeline (LangGraph + Gemini 2.5 Flash) that turns an ordinary
 situation into a dramatic, over-engineered multi-scene movie.
 
 ## Quick start
@@ -53,7 +53,8 @@ Every model call logs the full prompt, raw response, thought summary, and latenc
 | GET | `/api/options` | moods + directors for the dropdowns |
 | GET | `/api/pipeline` | static agent graph (for the UI agent-visualization) |
 | POST | `/api/generate` | situation (+mood/director) → full `Script` + `meta` |
-| POST | `/api/generate/stream` | same, as **SSE** — live per-agent events for visualization |
+| WS | `/api/generate/ws` | **live per-agent events** over a WebSocket (the transport the deployed UI uses) |
+| POST | `/api/generate/stream` | same events as **SSE** (kept for local dev / non-proxied callers) |
 | POST | `/api/regenerate` | regenerate one section: `title` / `tagline` / `scene` / `dialogue` / `characters` |
 
 ### Generate
