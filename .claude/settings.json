@@ -9,7 +9,12 @@
       "Bash(cd /tmp)",
       "Bash(grep -oE 'https?://[^\"`]*run\\\\.app[^\"`]*' bundle.js)",
       "Bash(grep -oE '\\(var|const|let\\)? ?ii=[^,;]{0,80}' bundle.js)",
-      "Bash(curl -s \"https://deepshorts-6c29a.web.app/index.html\" -o idx2.html)"
+      "Bash(curl -s \"https://deepshorts-6c29a.web.app/index.html\" -o idx2.html)",
+      "Bash('/c/Program Files/Google/Chrome/Application/chrome.exe' --headless=new --disable-gpu --no-sandbox --hide-scrollbars --window-size=1240,1700 --screenshot=D:/Parv/deepshorts/docs/_sp.png file:///D:/Parv/deepshorts/docs/system-prompt-infographic.html)",
+      "Bash(rm -f _sp.png _ai.png && echo \"=== final PDFs ===\" && ls -la *.pdf)"
+    ],
+    "additionalDirectories": [
+      "D:\\Parv\\deepshorts\\docs"
     ]
   }
 }

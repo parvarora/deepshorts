@@ -70,7 +70,11 @@
   .fact .l{color:var(--muted); font-size:11px; margin-top:5px}
   footer{color:var(--muted); font-size:11.5px; margin-top:26px; text-align:center}
   @media(max-width:900px){.grid{grid-template-columns:1fr}.strip,.facts{grid-template-columns:repeat(2,1fr)}}
-  @media print{body{padding:0}}
+  @media print{
+    *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+    @page{size:1240px 1480px; margin:0}
+    body{padding:34px 30px}
+  }
 </style>
 </head>
 <body>
