@@ -22,7 +22,11 @@ class Settings(BaseSettings):
 
     # --- Gemini ---
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-3.5-flash"
+    # gemini-2.5-flash: established model with the full free-tier allowance (15 RPM /
+    # 1500 RPD). The newer gemini-3.5-flash launched with a far smaller free daily cap
+    # (~20/day), which throttled generation, so we default to 2.5-flash. Override via
+    # the GEMINI_MODEL env var if you want a different model.
+    gemini_model: str = "gemini-2.5-flash"
 
     # --- Orchestration ---
     max_iterations: int = 2          # critic -> revise loop ceiling (loop guard)

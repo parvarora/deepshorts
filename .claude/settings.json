@@ -3,7 +3,13 @@
     "allow": [
       "Bash(gcloud --version)",
       "Bash(firebase --version)",
-      "Bash(docker --version)"
+      "Bash(docker --version)",
+      "Bash(git ls-remote *)",
+      "Bash(git fetch *)",
+      "Bash(cd /tmp)",
+      "Bash(grep -oE 'https?://[^\"`]*run\\\\.app[^\"`]*' bundle.js)",
+      "Bash(grep -oE '\\(var|const|let\\)? ?ii=[^,;]{0,80}' bundle.js)",
+      "Bash(curl -s \"https://deepshorts-6c29a.web.app/index.html\" -o idx2.html)"
     ]
   }
 }
