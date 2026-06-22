@@ -41,7 +41,11 @@ class Settings(BaseSettings):
     director_images_dir: Path = _REPO_ROOT / "directors"   # <id>.jpg photos for the UI
 
     # --- CORS ---
-    cors_origins: list[str] = ["http://localhost:5173", "http://localhost:3000"]
+    # "*" is fine here: this is a public, unauthenticated, cookie-free API (no user
+    # sessions to leak cross-origin). The frontend now calls Cloud Run directly
+    # (not through a Firebase Hosting rewrite — see docs/DEPLOY.md), so cross-origin
+    # browser requests are the normal case in production, not an edge case.
+    cors_origins: list[str] = ["*"]
 
 
 settings = Settings()
