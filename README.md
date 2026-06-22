@@ -18,6 +18,7 @@ React + Vite (frontend)  ──HTTP/SSE──▶  FastAPI (backend)  ──▶  
 - **Prompts:** [`prompts/`](prompts/) — composable base prompt + a **mood library** (16) and a
   **director library** (10) injected per request.
 - **Research:** [`research/`](research/) — the "anatomy of belovedness" craft study behind the Critic.
+- **Deploy:** [`docs/DEPLOY.md`](docs/DEPLOY.md) — going live on Firebase Hosting + Cloud Run.
 
 ## Run it
 **1. Backend**

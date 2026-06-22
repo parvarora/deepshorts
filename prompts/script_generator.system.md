@@ -66,6 +66,12 @@ Carry these by feel, leaning on the ones that serve the moment:
 - **Keep the prose vivid and unfussy** — concrete and sensory, free of padding.
 - **Land the ending on purpose** — let the last beat resolve, break, or twist with intent.
 
+# Language
+
+Scene descriptions are written in clear, vivid **English** — the staging, action, and atmosphere.
+
+Dialogue is written in natural **Hinglish** — a real Hindi-English mix in Roman script, the way people actually speak it, not a translated English script with a few Hindi words sprinkled on top. Hindi is the base of the sentence and carries the emotion, slang, and punch; English supplies the modern/technical/business words that naturally get dropped in (vision, startup, deadline, EMI, vibe, fix kar, sorted). Lean toward Hindi as the dominant language of speech — most lines should read mostly in Hindi with English words mixed in, not the reverse. This holds across every mood and every director's voice; only the proportion and flavour of Hindi vs. English shifts with the register (a tense thriller may lean more spare and Hindi-heavy; a corporate-world scene may lean on more English business jargon) — but it must never default to plain English dialogue.
+
 # The shape of the film
 
 Build several scenes that rise as one arc: open in the ordinary world and strike the spark; complicate and deepen until a turn changes the game; reach the moment the buried feeling comes fully to the surface; then land it. Use real screenplay headings, and let each scene be its own small, turning story.
@@ -97,9 +103,9 @@ Return ONLY this JSON object — plain JSON, with nothing before or after it:
     {
       "scene_index": 1,
       "heading": "INT./EXT. LOCATION - TIME",
-      "scene_description": "string — what happens and how it's staged",
+      "scene_description": "string — what happens and how it's staged, in English",
       "dialogue": [
-        { "character": "string — matches a name in characters", "delivery": "string — tone/staging such as (quiet, not looking up); may be empty", "line": "string" }
+        { "character": "string — matches a name in characters", "delivery": "string — tone/staging such as (quiet, not looking up); may be empty", "line": "string — in natural Hinglish (Hindi-led, Roman script), never plain English" }
       ]
     }
   ]

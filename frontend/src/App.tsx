@@ -5,6 +5,7 @@ import type { GenerateMeta, RegenType, Script, TraceStep } from "./types";
 import { useOptions } from "./hooks/useOptions";
 import { useHistory } from "./hooks/useHistory";
 import { useHealth } from "./hooks/useHealth";
+import { useTheme } from "./hooks/useTheme";
 import SituationInput from "./components/SituationInput";
 import MoodSelector from "./components/MoodSelector";
 import DirectorSelector from "./components/DirectorSelector";
@@ -29,6 +30,7 @@ function Home() {
   const { options } = useOptions();
   const history = useHistory();
   const apiStatus = useHealth();
+  const { theme, toggle: toggleTheme } = useTheme();
 
   const [situation, setSituation] = useState("");
   const [mood, setMood] = useState<string | null>(null);
@@ -122,10 +124,22 @@ function Home() {
           <span className="brand-emoji">🎬</span> DeepShorts
           <span className="brand-sub">Bollywood Script Generator</span>
         </a>
-        <span className={`status-pill ${apiStatus}`}>
-          <span className="status-dot" />
-          {apiStatus === "online" ? "API Ready" : apiStatus === "offline" ? "API Offline" : "Checking…"}
-        </span>
+        <div className="topbar-right">
+          <span className={`status-pill ${apiStatus}`}>
+            <span className="status-dot" />
+            {apiStatus === "online" ? "API Ready" : apiStatus === "offline" ? "API Offline" : "Checking…"}
+          </span>
+          <motion.button
+            type="button"
+            className="theme-toggle"
+            whileTap={{ scale: 0.85 }}
+            onClick={toggleTheme}
+            aria-label="Toggle light/dark theme"
+            title="Toggle theme"
+          >
+            {theme === "dark" ? "🌙" : "☀️"}
+          </motion.button>
+        </div>
       </header>
 
       <motion.section

@@ -44,14 +44,17 @@ class Blueprint(BaseModel):
 class DialogueLine(BaseModel):
     character: str
     delivery: str = ""                           # parenthetical: tone / staging
-    line: str
+    line: str = Field(
+        description="Natural Hinglish (Hindi-led, Roman script) with English only for "
+        "modern/technical words. Never plain English."
+    )
 
 
 class Scene(BaseModel):
     scene_index: int
     scene_title: Optional[str] = None
     heading: str
-    scene_description: str
+    scene_description: str = Field(description="In clear English: what happens and how it's staged.")
     dialogue: list[DialogueLine] = Field(min_length=1)
 
 

@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "public": "frontend/dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "run": { "serviceId": "deepshorts-api", "region": "asia-south1" }
+      },
+      {
+        "source": "/assets/**",
+        "run": { "serviceId": "deepshorts-api", "region": "asia-south1" }
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

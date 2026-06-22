@@ -25,17 +25,25 @@ You do NOT write full scenes yet. Read the situation and design the film's bluep
   and escalation (how it is bigger than the previous beat).
 The plan must escalate beat over beat and end with intent. Output the blueprint JSON only."""
 
-SCREENWRITER_ROLE = """# YOUR ROLE: SCREENWRITER
+LANGUAGE_RULE = """LANGUAGE (non-negotiable): scene_description is in clear English. Every dialogue
+line is in natural HINGLISH — Hindi-led, Roman script, the way people actually talk, with English
+words mixed in only for modern/technical/business terms (vision, startup, deadline, vibe, fix kar).
+Most of a line's words should be Hindi, not English. Never write a dialogue line in plain English."""
+
+SCREENWRITER_ROLE = f"""# YOUR ROLE: SCREENWRITER
 Write EVERY scene fully from the blueprint, in order. For each scene: scene_index (matching the
 plan), scene_title (short), heading, scene_description (what happens and how it is staged), and
-dialogue as a list of {character, delivery, line}. Honor the register and the director's voice.
+dialogue as a list of {{character, delivery, line}}. Honor the register and the director's voice.
 Keep characters perfectly consistent with the blueprint and escalate scene over scene.
-Output {"scenes": [...]} only."""
+{LANGUAGE_RULE}
+Output {{"scenes": [...]}} only."""
 
-REVISE_ROLE = """# YOUR ROLE: SCREENWRITER (revision pass)
+REVISE_ROLE = f"""# YOUR ROLE: SCREENWRITER (revision pass)
 You are revising your draft against the Script Doctor's notes. Fix EVERY listed issue while
 keeping what already works; preserve scene_index numbering and character consistency. Do not
-weaken the climax. Output the full corrected {"scenes": [...]} only."""
+weaken the climax.
+{LANGUAGE_RULE}
+Output the full corrected {{"scenes": [...]}} only."""
 
 CRITIC_ROLE = """# YOUR ROLE: SCRIPT DOCTOR (quality control)
 Judge the assembled script hard but fairly. Check:
@@ -43,19 +51,25 @@ Judge the assembled script hard but fairly. Check:
 - consistency: characters, world, and established facts hold across scenes
 - register fit: it genuinely matches the intended mood/register
 - dialogue: at least one memorable, quotable line per scene; voices are distinct
+- language: scene_description is in English AND every dialogue line is genuinely Hinglish
+  (Hindi-led, Roman script) — flag any line that is plain English as an issue to fix
 - structure: a clear climax and a deliberate ending; every scene has description + dialogue
 Return {passed, score 0-100, issues:[{scene_index, problem, fix}], note}. Pass ONLY if it is
 genuinely strong; otherwise give concrete, actionable fixes (not vibes). Output JSON only."""
 
-REGEN_SCENE_ROLE = """# YOUR ROLE: SCREENWRITER (single-scene rewrite)
+REGEN_SCENE_ROLE = f"""# YOUR ROLE: SCREENWRITER (single-scene rewrite)
 Rewrite ONLY the requested scene. The other scenes are LOCKED CANON — do not change them, and
 keep your new scene fully consistent with them and with the characters. Keep the same scene_index.
-Make it stronger and fresh. Output the single rewritten scene JSON only."""
+Make it stronger and fresh.
+{LANGUAGE_RULE}
+Output the single rewritten scene JSON only."""
 
-REGEN_DIALOGUE_ROLE = """# YOUR ROLE: DIALOGUE PASS (one scene)
+REGEN_DIALOGUE_ROLE = f"""# YOUR ROLE: DIALOGUE PASS (one scene)
 Rewrite ONLY the dialogue of the requested scene. Keep the scene's heading and scene_description
 unchanged in meaning, and keep the same speakers (from the character list). Make the lines punchier
-and more memorable while staying true to the register and voice. Output {"dialogue": [...]} only."""
+and more memorable while staying true to the register and voice.
+{LANGUAGE_RULE}
+Output {{"dialogue": [...]}} only."""
 
 REGEN_META_ROLE = """# YOUR ROLE: TITLE & TAGLINE
 Given the film, produce a fresh movie_title, tagline, and one-line logline that are blockbuster-worthy

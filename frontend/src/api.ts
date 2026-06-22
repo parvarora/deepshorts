@@ -8,8 +8,11 @@ import type {
   TraceStep,
 } from "./types";
 
+// Nullish coalescing (not ||): production sets VITE_API_BASE="" on purpose, meaning
+// "call same-origin, relative paths" (Firebase Hosting rewrites /api/** to Cloud Run).
+// `||` would treat that empty string as unset and silently fall back to localhost.
 export const API_BASE: string =
-  (import.meta.env.VITE_API_BASE as string) || "http://localhost:8000";
+  (import.meta.env.VITE_API_BASE as string | undefined) ?? "http://localhost:8000";
 
 export class ApiError extends Error {
   kind: string;

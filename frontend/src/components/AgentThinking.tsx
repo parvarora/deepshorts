@@ -1,80 +1,81 @@
 import { AnimatePresence, motion } from "framer-motion";
 import type { TraceStep } from "../types";
-import { describeStep, STAGE_KEYS, STAGE_TITLES } from "../labels";
+import { describeStep, STAGE_KEYS, STAGE_TITLES, type StageKey } from "../labels";
 
 interface Props {
   steps: TraceStep[];
   running: boolean;
 }
 
-/** Live view of the multi-agent pipeline: a fixed stepper + a streaming detail feed. */
+const STAGE_ICONS: Record<StageKey, string> = {
+  dispatch: "📜",
+  architect: "📐",
+  screenwriter: "✍️",
+  critic: "🩺",
+  finalize: "🎬",
+};
+
+/** A fixed-height (~2in) animated "now happening" panel — replaces a growing log
+ *  with a contained ticker so the page doesn't jump around as steps stream in. */
 export default function AgentThinking({ steps, running }: Props) {
-  const seen = new Set(steps.map((s) => s.step));
-  const lastStep = steps[steps.length - 1];
-  const activeKey = running ? lastStep?.step ?? "dispatch" : null;
+  const last = steps[steps.length - 1];
+  const currentKey: StageKey = (last?.step as StageKey) ?? "dispatch";
+  const stageIdx = Math.max(0, STAGE_KEYS.indexOf(currentKey));
+  const pct = ((stageIdx + 1) / STAGE_KEYS.length) * 100;
+
+  const display = last ? describeStep(last) : { label: "Warming up the writers' room…", detail: "" };
+  const icon = STAGE_ICONS[currentKey] ?? "🎬";
 
   return (
     <motion.div
-      className="pipeline-card"
+      className="pipeline-box"
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="pipeline-head">
-        <span className="reel">🎞️</span> The writers' room
+      <div className="pipeline-top">
+        <span className="pipeline-stage">{STAGE_TITLES[currentKey]}</span>
+        <span className="pipeline-count">
+          {Math.min(stageIdx + 1, STAGE_KEYS.length)} / {STAGE_KEYS.length}
+        </span>
       </div>
 
-      <div className="stepper">
-        {STAGE_KEYS.map((key, i) => {
-          const active = key === activeKey;
-          const reached = seen.has(key) || active;
-          const done = reached && !active;
-          return (
-            <div className="stepper-node-wrap" key={key}>
-              <div
-                className={`stepper-node ${done ? "done" : ""} ${active ? "active" : ""} ${
-                  !reached ? "pending" : ""
-                }`}
-              >
-                {done ? "✓" : active ? <span className="stepper-pulse" /> : i + 1}
-              </div>
-              <div className="stepper-label">{STAGE_TITLES[key]}</div>
-              {i < STAGE_KEYS.length - 1 && (
-                <div className={`stepper-line ${reached ? "filled" : ""}`} />
-              )}
+      <div className="pipeline-track">
+        <motion.div
+          className="pipeline-track-fill"
+          animate={{ width: `${pct}%` }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        />
+      </div>
+
+      <div className="pipeline-display">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={steps.length}
+            className="pipeline-row"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.span
+              className="pipeline-icon"
+              animate={running ? { y: [0, -5, 0] } : { y: 0 }}
+              transition={
+                running
+                  ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" }
+                  : { duration: 0.2 }
+              }
+            >
+              {icon}
+            </motion.span>
+            <div className="pipeline-text">
+              <div className="pipeline-label">{display.label}</div>
+              {display.detail && <div className="pipeline-detail">{display.detail}</div>}
             </div>
-          );
-        })}
-      </div>
-
-      <ul className="agent-feed">
-        <AnimatePresence initial={false}>
-          {steps.map((s, i) => {
-            const { label, detail } = describeStep(s);
-            return (
-              <motion.li
-                key={i}
-                className="agent-step"
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <span className="agent-tick">✓</span>
-                <div>
-                  <div className="agent-label">{label}</div>
-                  {detail && <div className="agent-detail">{detail}</div>}
-                </div>
-              </motion.li>
-            );
-          })}
+          </motion.div>
         </AnimatePresence>
-        {running && (
-          <li className="agent-step active-row">
-            <span className="agent-spinner" />
-            <div className="agent-label dim">working…</div>
-          </li>
-        )}
-      </ul>
+      </div>
     </motion.div>
   );
 }
